@@ -82,7 +82,7 @@ describe('<md-select>', function() {
 
   it('sets aria-owns between the select and the container', function() {
     var select = setupSelect('ng-model="val"').find('md-select');
-    var ownsId = select.attr('aria-owns'); 
+    var ownsId = select.attr('aria-owns');
     expect(ownsId).toBeTruthy();
     var containerId = select[0].querySelector('.md-select-menu-container').getAttribute('id');
     expect(ownsId).toBe(containerId);
@@ -137,7 +137,7 @@ describe('<md-select>', function() {
     var opts = [ { id: 1, name: 'Bob' }, { id: 2, name: 'Alice' } ];
     var select = setupSelect('ng-model="$root.val" ng-change="onChange()" ng-model-options="{trackBy: \'$value.id\'}"', opts);
     expect(changed).toBe(false);
-    
+
     openSelect(select);
     clickOption(select, 1);
     waitForSelectClose();
@@ -267,10 +267,39 @@ describe('<md-select>', function() {
                               '</md-select>' +
                             '</md-input-container>')($rootScope).find('md-select');
       var label = select.find('md-select-value');
+      var options = select.find('md-option');
+
       $rootScope.$digest();
 
       expect(label.text()).toBe('Two');
       expect(label.hasClass('md-select-placeholder')).toBe(false);
+
+
+      // Ensure every md-option element does not have a checkbox prepended to it.
+      for (var i = 0; i < options.length; i++) {
+        var checkBoxContainer = options[i].querySelector('.md-container');
+        var checkBoxIcon = options[i].querySelector('.md-icon');
+        expect(checkBoxContainer).toBe(null);
+        expect(checkBoxIcon).toBe(null);
+      }
+    }));
+
+    it('displays md-selected-text when specified', inject(function($rootScope) {
+      $rootScope.selectedText = 'Hello World';
+
+      var select = setupSelect('ng-model="someVal", md-selected-text="selectedText"', null, true).find('md-select');
+      var label = select.find('md-select-value');
+
+      expect(label.text()).toBe($rootScope.selectedText);
+
+      $rootScope.selectedText = 'Goodbye world';
+
+      // The label update function is not called until some user action occurs.
+      openSelect(select);
+      closeSelect(select);
+      waitForSelectClose();
+
+      expect(label.text()).toBe($rootScope.selectedText);
     }));
 
     it('supports rendering multiple', inject(function($rootScope, $compile) {
@@ -284,11 +313,99 @@ describe('<md-select>', function() {
                               '</md-select>' +
                             '</md-input-container>')($rootScope).find('md-select');
       var label = select.find('md-select-value');
+      var options = select.find('md-option');
+      var container;
+      var icon;
+
       $rootScope.$digest();
       $rootScope.$digest();
 
       expect(label.text()).toBe('One, Three');
       expect(label.hasClass('md-select-placeholder')).toBe(false);
+
+      // Ensure every md-option element has a checkbox prepended to it.
+      for (var i = 0; i < options.length; i++) {
+        var checkBoxContainer = options[i].querySelector('.md-container');
+        var checkBoxIcon = options[i].querySelector('.md-icon');
+        expect(checkBoxContainer).not.toBe(null);
+        expect(checkBoxIcon).not.toBe(null);
+      }
+
+    }));
+
+    describe('md-select-header behavior', function() {
+      it('supports rendering a md-select-header', inject(function($rootScope, $compile) {
+        $rootScope.val = [1];
+        var select = $compile(
+            '<md-input-container>' +
+            '  <label>Label</label>' +
+            '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+            '    <md-select-header class="demo-select-header">' +
+            '      <span>Hello World</span>' +
+            '    </md-select-header>' +
+            '    <md-optgroup label="stuff">' +
+            '      <md-option value="1">One</md-option>' +
+            '      <md-option value="2">Two</md-option>' +
+            '      <md-option value="3">Three</md-option>' +
+            '    </md-optgroup>' +
+            '  </md-select>' +
+            '</md-input-container>')($rootScope);
+
+        var header = select.find('md-select-header');
+        var headerContent = header.find('span');
+
+        expect(headerContent.text()).toBe('Hello World');
+      }));
+
+      it('does not render the label in md-optgroup if md-select-header is present', inject(function($rootScope, $compile) {
+        $rootScope.val = [1];
+        var select = $compile(
+            '<md-input-container>' +
+            '  <label>Label</label>' +
+            '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+            '    <md-select-header class="demo-select-header">' +
+            '      <span>Hello World</span>' +
+            '    </md-select-header>' +
+            '    <md-optgroup label="stuff">' +
+            '      <md-option value="1">One</md-option>' +
+            '      <md-option value="2">Two</md-option>' +
+            '      <md-option value="3">Three</md-option>' +
+            '    </md-optgroup>' +
+            '  </md-select>' +
+            '</md-input-container>')($rootScope);
+
+        var optgroupLabel = select[0].querySelector('.md-container-ignore');
+
+        expect(optgroupLabel).toBe(null);
+      }));
+    });
+
+    it('does not allow keydown events to propagate from inside the md-select-menu', inject(function($rootScope, $compile) {
+      $rootScope.val = [1];
+      var select = $compile(
+          '<md-input-container>' +
+          '  <label>Label</label>' +
+          '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+          '    <md-option value="1">One</md-option>' +
+          '    <md-option value="2">Two</md-option>' +
+          '    <md-option value="3">Three</md-option>' +
+          '  </md-select>' +
+          '</md-input-container>')($rootScope);
+
+      var mdOption = select.find('md-option');
+      var selectMenu = select.find('md-select-menu');
+      var keydownEvent = {
+	type: 'keydown',
+	target: mdOption[0],
+	preventDefault: jasmine.createSpy(),
+	stopPropagation: jasmine.createSpy()
+      };
+
+      openSelect(select);
+      angular.element(selectMenu).triggerHandler(keydownEvent);
+
+      expect(keydownEvent.preventDefault).toHaveBeenCalled();
+      expect(keydownEvent.stopPropagation).toHaveBeenCalled();
     }));
 
     it('supports raw html', inject(function($rootScope, $compile, $sce) {
@@ -531,7 +648,6 @@ describe('<md-select>', function() {
   });
 
   describe('multiple', function() {
-
 
     describe('model->view', function() {
 
