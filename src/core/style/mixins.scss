@@ -32,17 +32,17 @@
 }
 
 @mixin md-shadow-bottom-z-1() {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  box-shadow: 0 0.125em 0.3125em 0 rgba(0, 0, 0, 0.26);
 }
 
 @mixin md-shadow-bottom-z-2() {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0.25em 0.5em 0 rgba(0, 0, 0, 0.4);
 }
 
 // Mixin for a "flat" input that can be used for components that contain an input
 // (datepicker, autocomplete).
 @mixin md-flat-input() {
-  font-size: 14px;
+  font-size: 0.875em;
 
   box-sizing: border-box;
   border: none;

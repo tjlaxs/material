@@ -22,13 +22,13 @@ md-toast {
     height: 0;
     max-height: 7 * $toast-height;
     max-width: 100%;
-    min-height: 48px;
-    padding-left: 24px;
-    padding-right: 24px;
+    min-height: 3em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
 
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-    border-radius: 2px;
-    font-size: 14px;
+    box-shadow: 0 0.125em 0.3125em 0 rgba(0, 0, 0, 0.26);
+    border-radius: 0.125em;
+    font-size: 0.875em;
 
     overflow: hidden;
 
@@ -38,10 +38,10 @@ md-toast {
   }
 
   &.md-capsule {
-    border-radius: 24px;
+    border-radius: 1.5em;
 
     .md-toast-content {
-      border-radius: 24px;
+      border-radius: 1.5em;
     }
   }
 
@@ -106,8 +106,8 @@ md-toast {
   }
 
   .md-action {
-    line-height: 19px;
-    margin-left: 24px;
+    line-height: 1.1875em;
+    margin-left: 1.5em;
     margin-right: 0;
     cursor: pointer;
     text-transform: uppercase;
@@ -146,7 +146,7 @@ md-toast {
 
 @media (min-width: $layout-breakpoint-sm) {
   md-toast {
-    min-width: 288px + $toast-margin * 2;
+    min-width: 18em + $toast-margin * 2;
     &.md-bottom {
       bottom: 0;
     }
@@ -189,7 +189,7 @@ md-toast {
 
 @media screen and (-ms-high-contrast: active) {
   md-toast {
-    border: 1px solid #fff;
+    border: 0.0625em solid #fff;
   }
 }
 

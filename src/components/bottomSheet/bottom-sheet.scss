@@ -2,7 +2,7 @@ $bottom-sheet-horizontal-padding: 2 * $baseline-grid !default;
 $bottom-sheet-vertical-padding: 1 * $baseline-grid !default;
 $bottom-sheet-icon-after-margin: 4 * $baseline-grid !default;
 $bottom-sheet-list-item-height: 6 * $baseline-grid !default;
-$bottom-sheet-hidden-bottom-padding: 80px !default;
+$bottom-sheet-hidden-bottom-padding: 5em !default;
 $bottom-sheet-header-height: 7 * $baseline-grid !default;
 $bottom-sheet-grid-font-weight: 400 !default;
 
@@ -14,7 +14,7 @@ md-bottom-sheet {
   padding: $bottom-sheet-vertical-padding $bottom-sheet-horizontal-padding $bottom-sheet-vertical-padding + $bottom-sheet-hidden-bottom-padding $bottom-sheet-horizontal-padding;
   z-index: $z-index-bottom-sheet;
 
-  border-top-width: 1px;
+  border-top-width: 0.0625em;
   border-top-style: solid;
 
   transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
@@ -52,8 +52,8 @@ md-bottom-sheet {
 
   md-inline-icon {
     display: inline-block;
-    height: 24px;
-    width: 24px;
+    height: 1.5em;
+    width: 1.5em;
     fill: #444;
   }
 
@@ -148,7 +148,7 @@ md-bottom-sheet {
       }
 
       .md-grid-item-content {
-        border: 1px solid transparent;
+        border: 0.0625em solid transparent;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -181,6 +181,6 @@ md-bottom-sheet {
 // IE only
 @media screen and (-ms-high-contrast: active) {
   md-bottom-sheet {
-    border: 1px solid #fff;
+    border: 0.0625em solid #fff;
   }
 }

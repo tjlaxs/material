@@ -14,7 +14,7 @@ body {
   outline: none;
 }
 .inset {
-  padding: 10px;
+  padding: 0.625em;
 }
 
 button.md-no-style {
@@ -67,13 +67,13 @@ input {
 .md-visually-hidden {
   border: 0;
   clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
+  height: 0.0625em;
+  margin: -0.0625em;
   overflow: hidden;
   padding: 0;
   position: absolute;
   text-transform: none;
-  width: 1px;
+  width: 0.0625em;
 }
 
 .md-shadow {
@@ -136,11 +136,11 @@ input {
 }
 
 .md-padding {
-  padding: 8px;
+  padding: 0.5em;
 }
 
 .md-margin {
-  margin: 8px;
+  margin: 0.5em;
 }
 
 .md-scroll-mask {
@@ -158,12 +158,12 @@ input {
     top: 0;
     bottom: 0;
     z-index: $z-index-scroll-mask;
-    box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.3)
+    box-shadow: inset 0px 0px 0.0625em rgba(0, 0, 0, 0.3)
   }
 }
 
 @media (min-width: $layout-breakpoint-sm) {
   .md-padding {
-    padding: 16px;
+    padding: 1em;
   }
 }

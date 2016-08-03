@@ -1,13 +1,13 @@
-$switch-width: 36px !default;
+$switch-width: 2.25em !default;
 $switch-height: $baseline-grid * 3 !default;
-$switch-bar-height: 14px !default;
-$switch-thumb-size: 20px !default;
-$switch-margin: 16px !default;
+$switch-bar-height: 0.875em !default;
+$switch-thumb-size: 1.25em !default;
+$switch-margin: 1em !default;
 
 .md-inline-form {
   md-switch {
-    margin-top: 18px;
-    margin-bottom: 19px;
+    margin-top: 1.125em;
+    margin-bottom: 1.1875em;
   }
 }
 
@@ -17,8 +17,8 @@ md-switch {
   cursor: pointer;
   outline: none;
   user-select: none;
-  height: 30px;
-  line-height: 28px;
+  height: 1.875em;
+  line-height: 1.75em;
   align-items: center;
   display: flex;
 
@@ -44,7 +44,7 @@ md-switch {
     height: $switch-height;
     position: relative;
     user-select: none;
-    margin-right: 8px;
+    margin-right: 0.5em;
     float: left;
   }
 
@@ -58,10 +58,10 @@ md-switch {
 
   &.md-focused:not([disabled]) {
     .md-thumb:before {
-      left: -8px;
-      top: -8px;
-      right: -8px;
-      bottom: -8px;
+      left: -0.5em;
+      top: -0.5em;
+      right: -0.5em;
+      bottom: -0.5em;
     }
 
     &:not(.md-checked) {
@@ -78,11 +78,11 @@ md-switch {
   }
 
   .md-bar {
-    left: 1px;
-    width: $switch-width - 2px;
+    left: 0.0625em;
+    width: $switch-width - 0.125em;
     top: $switch-height / 2 - $switch-bar-height / 2;
     height: $switch-bar-height;
-    border-radius: 8px;
+    border-radius: 0.5em;
     position: absolute;
   }
 

@@ -1,6 +1,6 @@
-$select-option-height: 48px;
-$select-option-padding: 16px;
-$select-container-padding: 16px;
+$select-option-height: 3em;
+$select-option-padding: 1em;
+$select-container-padding: 1em;
 $select-container-transition-duration: 350ms;
 
 $select-max-visible-options: 5;
@@ -60,9 +60,9 @@ md-select {
     background-position: 0 bottom;
     // This background-size is coordinated with a linear-gradient set in select-theme.scss
     // to create a dotted line under the input.
-    background-size: 4px 1px;
+    background-size: 0.25em 0.0625em;
     background-repeat: repeat-x;
-    margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
+    margin-bottom: -0.0625em; // Shift downward so dotted line is positioned the same as other bottom borders
   }
   &:focus {
     outline: none;
@@ -76,13 +76,13 @@ md-select {
     }
     &.ng-invalid.ng-dirty {
       .md-select-value {
-        border-bottom: 2px solid;
+        border-bottom: 0.125em solid;
         padding-bottom: 0;
       }
     }
     &:focus {
       .md-select-value {
-        border-bottom-width: 2px;
+        border-bottom-width: 0.125em;
         border-bottom-style: solid;
         padding-bottom: 0;
       }
@@ -94,14 +94,14 @@ md-select {
 .md-select-value {
   display: flex;
   align-items: center;
-  padding: 2px 2px 1px;
-  border-bottom-width: 1px;
+  padding: 0.125em 0.125em 0.0625em;
+  border-bottom-width: 0.0625em;
   border-bottom-style: solid;
   background-color: rgba(0,0,0,0);
   position: relative;
   box-sizing: content-box;
   min-width: 8 * $baseline-grid;
-  min-height: 26px;
+  min-height: 1.625em;
   flex-grow: 1;
 
   .md-text {
@@ -113,7 +113,7 @@ md-select {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    transform: translate3d(0, 2px, 0);
+    transform: translate3d(0, 0.125em, 0);
   }
 
   .md-select-icon {
@@ -122,14 +122,14 @@ md-select {
     text-align: end;
     width: 3 * $baseline-grid;
     margin: 0 .5 * $baseline-grid;
-    transform: translate3d(0, 1px, 0);
+    transform: translate3d(0, 0.0625em, 0);
   }
 
   .md-select-icon:after {
     display: block;
     content: '\25BC';
     position: relative;
-    top: 2px;
+    top: 0.125em;
     speak: none;
     transform: scaleY(0.6) scaleX(1);
   }
@@ -139,7 +139,7 @@ md-select {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    padding-left: 2px;
+    padding-left: 0.125em;
     z-index: 1;
   }
 }
@@ -168,7 +168,7 @@ md-select-menu {
   transform: scale(1.0);
 
   md-content {
-    min-width: 136px;
+    min-width: 8.5em;
     min-height: $select-option-height;
     max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
     overflow-y: auto;
@@ -225,6 +225,6 @@ md-optgroup {
     background-color: transparent;
   }
   md-select-menu {
-    border: 1px solid #fff;
+    border: 0.0625em solid #fff;
   }
 }
