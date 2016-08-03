@@ -14,6 +14,8 @@ describe('<md-chips>', function() {
     '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
   var CHIP_SELECT_TEMPLATE =
     '<md-chips ng-model="items" md-on-select="selectChip($chip)"></md-chips>';
+  var CHIP_READONLY_TEMPLATE =
+    '<md-chips ng-model="items" readonly="isReadonly"></md-chips>';
   var CHIP_READONLY_AUTOCOMPLETE_TEMPLATE =
     '<md-chips ng-model="items" readonly="true">' +
     '  <md-autocomplete md-items="item in [\'hi\', \'ho\', \'he\']"></md-autocomplete>' +
@@ -254,14 +256,6 @@ describe('<md-chips>', function() {
         expect(scope.items[3].uppername).toBe('GRAPE');
       });
 
-      it('should not throw an error when using readonly with an autocomplete', function() {
-        var element = buildChips(CHIP_READONLY_AUTOCOMPLETE_TEMPLATE);
-
-        $timeout.flush();
-
-        expect($exceptionHandler.errors).toEqual([]);
-      });
-
       it('should disallow duplicate object chips', function() {
         var element = buildChips(CHIP_APPEND_TEMPLATE);
         var ctrl = element.controller('mdChips');
@@ -345,7 +339,58 @@ describe('<md-chips>', function() {
           expect(enterEvent.preventDefault).toHaveBeenCalled();
         }));
 
+        it('should trim the buffer when a chip will be added', inject(function($mdConstant) {
+          var element = buildChips(BASIC_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input');
+
+          // This string contains a lot of spaces, which should be trimmed.
+          input.val('    Test    ');
+          input.triggerHandler('input');
+
+          expect(ctrl.chipBuffer).toBeTruthy();
+
+          var enterEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.ENTER,
+            which: $mdConstant.KEY_CODE.ENTER
+          };
+
+          input.triggerHandler(enterEvent);
+
+          expect(scope.items).toEqual(['Apple', 'Banana', 'Orange', 'Test']);
+        }));
+
+        it('should not trim the input text of the input', inject(function($mdConstant) {
+          var element = buildChips(BASIC_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input');
+
+          input.val('    ');
+          input.triggerHandler('input');
+
+          expect(ctrl.chipBuffer).toBeTruthy();
+
+          var enterEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.BACKSPACE,
+            which: $mdConstant.KEY_CODE.BACKSPACE,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+
+          input.triggerHandler(enterEvent);
+
+          expect(enterEvent.preventDefault).not.toHaveBeenCalled();
+
+          input.val('');
+          input.triggerHandler('input');
+
+          input.triggerHandler(enterEvent);
+
+          expect(enterEvent.preventDefault).toHaveBeenCalledTimes(1);
+        }));
       });
+
 
       it('focuses/blurs the component when focusing/blurring the input', inject(function() {
         var element = buildChips(BASIC_CHIP_TEMPLATE);
@@ -449,6 +494,173 @@ describe('<md-chips>', function() {
 
           expect(semicolonInput.preventDefault).toHaveBeenCalled();
         }));
+      });
+
+      describe('md-max-chips', function() {
+
+        beforeEach(function() {
+          // Clear default items to test the max chips functionality
+          scope.items = [];
+        });
+
+        it('should not add a new chip if the max-chips limit is reached', function () {
+          var element = buildChips('<md-chips ng-model="items" md-max-chips="1"></md-chips>');
+          var ctrl = element.controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).toBe(1);
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test 2';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).not.toBe(2);
+        });
+
+        it('should update the md-max-chips model validator for forms', function() {
+          var template =
+            '<form name="form">' +
+            '<md-chips name="chips" ng-model="items" md-max-chips="1"></md-chips>' +
+            '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.form.chips.$error['md-max-chips']).toBe(true);
+        });
+
+        it('should not reset the buffer if the maximum is reached', function() {
+          var element = buildChips('<md-chips ng-model="items" md-max-chips="1"></md-chips>');
+          var ctrl = element.controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).toBe(1);
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test 2';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(ctrl.chipBuffer).toBe('Test 2');
+          expect(scope.items.length).not.toBe(2);
+        });
+
+        it('should not append the chip when maximum is reached and using an autocomplete', function() {
+          var template =
+            '<md-chips ng-model="items" md-max-chips="1">' +
+              '<md-autocomplete ' +
+                'md-selected-item="selectedItem" ' +
+                'md-search-text="searchText" ' +
+                'md-items="item in querySearch(searchText)" ' +
+                'md-item-text="item">' +
+             '<span md-highlight-text="searchText">{{itemtype}}</span>' +
+            '</md-autocomplete>' +
+          '</md-chips>';
+
+          setupScopeForAutocomplete();
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+
+          // Flush the autocompletes init timeout.
+          $timeout.flush();
+
+          var autocompleteCtrl = element.find('md-autocomplete').controller('mdAutocomplete');
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.scope.searchText = 'K';
+          });
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.select(0);
+          });
+
+          $timeout.flush();
+
+          expect(scope.items.length).toBe(1);
+          expect(scope.items[0]).toBe('Kiwi');
+          expect(element.find('input').val()).toBe('');
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.scope.searchText = 'O';
+          });
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.select(0);
+          });
+
+          $timeout.flush();
+
+          expect(scope.items.length).toBe(1);
+          expect(element.find('input').val()).toBe('Orange');
+        });
+
+      });
+
+      describe('focus functionality', function() {
+        var element, ctrl;
+
+        beforeEach(function() {
+          element = buildChips(CHIP_SELECT_TEMPLATE);
+          ctrl = element.controller('mdChips');
+          document.body.appendChild(element[0]);
+        });
+
+        afterEach(function() {
+          element.remove();
+          element = ctrl = null;
+        });
+
+        it('should focus the chip when clicking / touching on the chip', function() {
+          ctrl.focusChip = jasmine.createSpy('focusChipSpy');
+
+          var chips = getChipElements(element);
+          expect(chips.length).toBe(3);
+
+          chips.children().eq(0).triggerHandler('click');
+
+          expect(ctrl.focusChip).toHaveBeenCalledTimes(1);
+        });
+
+        it('should focus the chip through normal content focus', function() {
+          scope.selectChip = jasmine.createSpy('focusChipSpy');
+          var chips = getChipElements(element);
+          expect(chips.length).toBe(3);
+
+          chips.children().eq(0).triggerHandler('focus');
+
+          expect(scope.selectChip).toHaveBeenCalledTimes(1);
+        });
+
+        it('should blur the chip correctly', function() {
+          var chips = getChipElements(element);
+          expect(chips.length).toBe(3);
+
+          var chipContent = chips.children().eq(0);
+          chipContent.triggerHandler('focus');
+
+          expect(ctrl.selectedChip).toBe(0);
+
+          chipContent.eq(0).triggerHandler('blur');
+
+          scope.$digest();
+
+          expect(ctrl.selectedChip).toBe(-1);
+        });
+
       });
 
       describe('md-autocomplete', function() {

@@ -58,7 +58,7 @@ md-checkbox {
     height: $checkbox-height;
     @include rtl(left, 0, auto);
     @include rtl(right, auto, 0);
-
+    
     &:before {
       box-sizing: border-box;
       background-color: transparent;
