@@ -23,7 +23,7 @@ $icon-float-focused-top: -0.5em !default;
 
 md-input-container {
   @include pie-clearfix();
-  display: inline-block;
+  display: block;
   position: relative;
   padding: $input-container-padding;
   margin: 1.125em 0;
@@ -111,7 +111,7 @@ md-input-container {
     @include rtl(padding-left, $input-container-padding + 0.0625em, 0);
     @include rtl(padding-right, 0, $input-container-padding + 0.0625em);
     z-index: 1;
-    transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
+    transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
 
     @include rtl(transform-origin, left top, right top);
