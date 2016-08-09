@@ -1,20 +1,20 @@
 // Standard/Desktop Heights
-$toolbar-tools-height: 64px !default;
-$toolbar-height: 64px !default;
-$toolbar-medium-tall-height: 88px !default;
-$toolbar-tall-height: 128px !default;
+$toolbar-tools-height: 4em !default;
+$toolbar-height: 4em !default;
+$toolbar-medium-tall-height: 5.5em !default;
+$toolbar-tall-height: 8em !default;
 
 // Mobile portrait heights
-$toolbar-tools-height-mobile-portrait: 56px !default;
-$toolbar-height-mobile-portrait: 56px !default;
+$toolbar-tools-height-mobile-portrait: 3.5em !default;
+$toolbar-height-mobile-portrait: 3.5em !default;
 
 // Mobile landscape heights
-$toolbar-tools-height-mobile-landscape: 48px !default;
-$toolbar-height-mobile-landscape: 48px !default;
+$toolbar-tools-height-mobile-landscape: 3em !default;
+$toolbar-height-mobile-landscape: 3em !default;
 
 
-$toolbar-indent-margin: 64px !default;
-$toolbar-padding: 16px !default;
+$toolbar-indent-margin: 4em !default;
+$toolbar-padding: 1em !default;
 
 $icon-button-margin-offset: rem(-0.800) !default;
 
@@ -26,7 +26,6 @@ md-toolbar {
   position: relative;
   z-index: 2;
 
-  font-size: rem(2.0);
   min-height: $baseline-grid * 8;
   width: 100%;
 
@@ -56,9 +55,9 @@ md-toolbar {
     max-height: $toolbar-medium-tall-height;
 
     .md-toolbar-tools {
-      height: 48px;
-      min-height: 48px;
-      max-height: 48px;
+      height: 3em;
+      min-height: 3em;
+      max-height: 3em;
     }
   }
 
@@ -80,7 +79,6 @@ md-toolbar {
 }
 
 .md-toolbar-tools {
-  font-size: $title-font-size-base;
   letter-spacing: 0.005em;
   box-sizing: border-box;
   font-weight: 400;
@@ -95,7 +93,7 @@ md-toolbar {
   margin: 0;
 
   h1, h2, h3 {
-    font-size: inherit;
+    font-size: $title-font-size-base;
     font-weight: inherit;
     margin: inherit;
   }
@@ -127,7 +125,7 @@ md-toolbar {
   }
 
   @media screen and (-ms-high-contrast: active) {
-    border-bottom: 1px solid #fff;
+    border-bottom: 0.0625em solid #fff;
   }
 }
 

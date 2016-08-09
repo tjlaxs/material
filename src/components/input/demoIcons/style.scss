@@ -1,4 +1,4 @@
-.inputIconDemo { min-height: 48px; }
+.inputIconDemo { min-height: 3em; }
 md-input-container:not(.md-input-invalid) > md-icon.email { color: green; }
 md-input-container:not(.md-input-invalid) > md-icon.name { color: dodgerblue; }
 md-input-container.md-input-invalid > md-icon.email,
@@ -6,8 +6,8 @@ md-input-container.md-input-invalid > md-icon.name { color: red; }
 /*
 .right-icon {
   position: absolute;
-  top: 4px;
-  right: 2px;
+  top: 0.25em;
+  right: 0.125em;
   left: auto;
   margin-top: 0;
 }
