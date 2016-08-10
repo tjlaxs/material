@@ -23,7 +23,7 @@ $icon-float-focused-top: -0.5em !default;
 
 md-input-container {
   @include pie-clearfix();
-  display: block;
+  display: inline-block;
   position: relative;
   padding: $input-container-padding;
   margin: 1.125em 0;
